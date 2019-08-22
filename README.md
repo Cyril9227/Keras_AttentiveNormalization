@@ -10,4 +10,5 @@ Attentive Normalization (AN) is an attention-based version of BN which recalibra
   <img src="img/AN.PNG">
 </p>
 
+## Usage
 Please refer to the notebook for an usage example.
