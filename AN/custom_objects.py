@@ -14,7 +14,7 @@ class ANInitializer(initializers.Initializer):
           bias: bias factor
           shape: shape of variable
           dtype: dtype of variable
-          partition_info: unused
+          seed: random seed for reprocudibility
         # Returns:
           an initialization for the variable
           
@@ -27,4 +27,4 @@ class ANInitializer(initializers.Initializer):
 
     def __call__(self, shape, dtype=None):
         dtype = dtype or K.floatx()
-        return self.scale * K.random_normal(shape=shape, mean=0.0, stddev=1, seed=self.seed) + self.bias
+        return self.scale * K.random_normal(shape=shape, mean=0.0, stddev=1., seed=self.seed) + self.bias
