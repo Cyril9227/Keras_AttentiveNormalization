@@ -7,7 +7,7 @@ from AN.custom_objects import ANInitializer
 class AttentiveNormalization(layers.BatchNormalization):
     
     def __init__(self, n_mixture=5, momentum=0.99, epsilon=0.1, axis=-1, center=False, scale=False, **kwargs):
-        super(AttentiveNormalization, self).__init__(momentum=0.99, epsilon=0.1, axis=-1, center=False, scale=False, **kwargs)
+        super(AttentiveNormalization, self).__init__(momentum=momentum, epsilon=epsilon, axis=axis, center=center, scale=scale, **kwargs)
 
         if self.axis == -1:
             self.data_format = 'channels_last'
