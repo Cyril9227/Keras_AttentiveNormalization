@@ -17,8 +17,8 @@ class AttentiveNormalization(layers.BatchNormalization):
         self.n_mixture = n_mixture
         
     def build(self, input_shape):
-        if len(input_shape) != 4:
-            raise ValueError('expected 4D input (got {}D input)'.format(input_shape))
+        if len(input_shape) != 4 and len(input_shape) != 3:
+            raise ValueError('expected 3D or 4D input, got shape {}'.format(input_shape))
             
         super(AttentiveNormalization, self).build(input_shape)
         
@@ -28,7 +28,10 @@ class AttentiveNormalization(layers.BatchNormalization):
         self.FC = layers.Dense(self.n_mixture, activation="sigmoid")
         self.FC.build(input_shape) # (N, C)
         
-        self.GlobalAvgPooling = layers.GlobalAveragePooling2D(self.data_format)
+        if len(input_shape) == 4:
+            self.GlobalAvgPooling = layers.GlobalAveragePooling2D(self.data_format)
+        else:
+            self.GlobalAvgPooling = layers.GlobalAveragePooling1D(self.data_format)
         self.GlobalAvgPooling.build(input_shape)
         
         self._trainable_weights = self.FC.trainable_weights
@@ -55,8 +58,12 @@ class AttentiveNormalization(layers.BatchNormalization):
 
         # broadcast if needed
         if K.int_shape(input)[0] is None or K.int_shape(input)[0] > 1:
-            gamma_readjust = gamma_readjust[:, None, None, :]
-            beta_readjust  = beta_readjust[:, None, None, :]
+            if len(input_shape) == 4:
+                gamma_readjust = gamma_readjust[:, None, None, :]
+                beta_readjust  = beta_readjust[:, None, None, :]
+            else:
+                gamma_readjust = gamma_readjust[:, None, :]
+                beta_readjust  = beta_readjust[:, None, :]
 
         return gamma_readjust * out_BN + beta_readjust
 
