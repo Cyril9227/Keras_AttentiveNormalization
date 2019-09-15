@@ -17,7 +17,7 @@ class AttentiveNormalization(layers.BatchNormalization):
         self.n_mixture = n_mixture
         
     def build(self, input_shape):
-        if len(input_shape) != 4 or len(input_shape!=3):
+        if len(input_shape) != 4 and len(input_shape) != 3:
             raise ValueError('expected 3D or 4D input, got shape {}'.format(input_shape))
             
         super(AttentiveNormalization, self).build(input_shape)
